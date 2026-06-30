@@ -1,0 +1,118 @@
+.services {
+
+    padding: 80px 10%;
+    overflow-x: hidden;
+    background: #f8f8f8;
+
+}
+
+.services h2 {
+
+    text-align: center;
+
+    font-size: 45px;
+
+    margin-bottom: 50px;
+
+    color: #222;
+
+}
+
+.container {
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 30px;
+
+    justify-items: center;
+    overflow-x: hidden;
+
+}
+
+/* ========================= */
+/* Tablet */
+/* ========================= */
+
+@media (max-width:992px) {
+
+    .services {
+
+        padding: 70px 8%;
+
+    }
+
+    .services h2 {
+
+        font-size: 38px;
+
+    }
+
+    .container {
+
+        grid-template-columns: repeat(2, 1fr);
+
+        gap: 25px;
+
+    }
+
+}
+
+/* ========================= */
+/* Mobile */
+/* ========================= */
+
+@media (max-width:768px) {
+
+    .services {
+
+        padding: 60px 5%;
+
+    }
+
+    .services h2 {
+
+        font-size: 32px;
+
+        margin-bottom: 35px;
+
+    }
+
+    .container {
+
+        grid-template-columns: 1fr;
+
+        justify-items: center;
+
+        gap: 20px;
+
+    }
+
+}
+
+/* ========================= */
+/* Small Mobile */
+/* ========================= */
+
+@media (max-width:480px) {
+
+    .services {
+
+        padding: 50px 4%;
+
+    }
+
+    .services h2 {
+
+        font-size: 28px;
+
+    }
+
+    .container {
+
+        gap: 18px;
+
+    }
+
+}

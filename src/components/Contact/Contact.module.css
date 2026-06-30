@@ -1,0 +1,331 @@
+.contact{
+
+    padding:90px 8%;
+    background:#f8f8f8;
+
+}
+
+.heading{
+
+    text-align:center;
+    margin-bottom:60px;
+
+}
+
+.heading h2{
+
+    font-size:48px;
+    color:#222;
+    margin-bottom:15px;
+
+}
+
+.heading p{
+
+    font-size:18px;
+    color:#666;
+    max-width:650px;
+    margin:auto;
+    line-height:1.8;
+
+}
+
+/* ========================= */
+
+.container{
+
+    display:grid;
+    grid-template-columns:1fr 1.2fr;
+    gap:50px;
+    align-items:start;
+
+}
+
+/* ========================= */
+/* Left Side */
+/* ========================= */
+
+.info{
+
+    background:#111;
+    color:white;
+    padding:40px;
+    border-radius:15px;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+
+}
+
+.info h3{
+
+    font-size:34px;
+    margin-bottom:35px;
+    color:#D4AF37;
+
+}
+
+.item{
+
+    display:flex;
+    align-items:flex-start;
+    gap:18px;
+    margin-bottom:30px;
+
+}
+
+.item span{
+
+    font-size:28px;
+
+}
+
+.item h4{
+
+    font-size:20px;
+    margin-bottom:6px;
+
+}
+
+.item p{
+
+    color:#ddd;
+    line-height:1.6;
+    font-size:16px;
+
+}
+
+/* ========================= */
+/* Right Side */
+/* ========================= */
+
+.form{
+
+    background:white;
+    padding:40px;
+    border-radius:15px;
+    box-shadow:0 10px 30px rgba(0,0,0,.1);
+
+}
+
+.form input,
+.form textarea{
+
+    width:100%;
+    padding:16px 18px;
+    margin-bottom:20px;
+    border:2px solid #ddd;
+    border-radius:8px;
+    font-size:16px;
+    outline:none;
+    transition:.3s;
+    resize:none;
+
+}
+
+.form input:focus,
+.form textarea:focus{
+
+    border-color:#D4AF37;
+    box-shadow:0 0 12px rgba(212,175,55,.25);
+
+}
+
+.form button{
+
+    width:100%;
+    padding:16px;
+    background:#D4AF37;
+    color:#111;
+    border:none;
+    border-radius:8px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+
+}
+
+.form button:hover{
+
+    background:#111;
+    color:white;
+    transform:translateY(-3px);
+
+}
+
+/* ========================= */
+/* Tablet */
+/* ========================= */
+
+@media(max-width:992px){
+
+.container{
+
+    grid-template-columns:1fr;
+    gap:35px;
+
+}
+
+.info{
+
+    order:2;
+
+}
+
+.form{
+
+    order:1;
+
+}
+
+.heading h2{
+
+    font-size:40px;
+
+}
+
+}
+
+/* ========================= */
+/* Mobile */
+/* ========================= */
+
+@media(max-width:768px){
+
+.contact{
+
+    padding:70px 5%;
+
+}
+
+.heading h2{
+
+    font-size:34px;
+
+}
+
+.heading p{
+
+    font-size:16px;
+
+}
+
+.info,
+.form{
+
+    padding:25px;
+
+}
+
+.info h3{
+
+    font-size:28px;
+
+}
+
+.item{
+
+    gap:12px;
+
+}
+
+.item span{
+
+    font-size:24px;
+
+}
+
+.item h4{
+
+    font-size:18px;
+
+}
+
+.item p{
+
+    font-size:15px;
+
+}
+
+.form input,
+.form textarea{
+
+    padding:14px;
+
+}
+
+.form button{
+
+    font-size:16px;
+
+}
+
+}
+
+/* ========================= */
+/* Small Mobile */
+/* ========================= */
+
+@media(max-width:480px){
+
+.contact{
+
+    padding:60px 4%;
+
+}
+
+.heading h2{
+
+    font-size:28px;
+
+}
+
+.heading p{
+
+    font-size:15px;
+
+}
+
+.info,
+.form{
+
+    padding:20px;
+
+}
+
+}
+
+.success{
+
+    margin-top:20px;
+
+    color:green;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    text-align:center;
+
+    animation:fade .5s ease;
+
+}
+
+@keyframes fade{
+
+from{
+
+opacity:0;
+
+transform:translateY(10px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
