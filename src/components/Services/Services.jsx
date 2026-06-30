@@ -2,9 +2,9 @@ import { useState } from "react";
 import styles from "./Services.module.css";
 import ServiceCard from "../ServiceCard/ServiceCard";
 
-import interior from "../../assets/interior.jpg.png";
-import planning from "../../assets/planning.jpg.png";
-import furniture from "../../assets/furniture.jpg.png";
+import interior from "../../assets/interior.jpg";
+import planning from "../../assets/planning.jpg";
+import furniture from "../../assets/furniture.jpg";
 
 function Services() {
     
