@@ -132,7 +132,7 @@ function Footer() {
 
                         <FaPhoneAlt />
 
-                        +91 9876543210
+                        +91 9837810456
 
                     </p>
 

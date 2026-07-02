@@ -4,12 +4,10 @@ import styles from "./Contact.module.css";
 function Contact() {
 
     const [formData, setFormData] = useState({
-
         name: "",
         email: "",
         phone: "",
         message: ""
-
     });
 
     const [success, setSuccess] = useState("");
@@ -31,15 +29,10 @@ function Contact() {
         e.preventDefault();
 
         if (
-
             !formData.name ||
-
             !formData.email ||
-
             !formData.phone ||
-
             !formData.message
-
         ) {
 
             alert("Please fill all fields.");
@@ -48,29 +41,9 @@ function Contact() {
 
         }
 
-        const emailPattern =
+        console.log(formData);
 
-            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!emailPattern.test(formData.email)) {
-
-            alert("Invalid Email");
-
-            return;
-
-        }
-
-        const phonePattern = /^[0-9]{10}$/;
-
-        if (!phonePattern.test(formData.phone)) {
-
-            alert("Enter Valid 10 Digit Phone Number");
-
-            return;
-
-        }
-
-        setSuccess("Your Message Sent Successfully ✔");
+        setSuccess("Message Sent Successfully!");
 
         setFormData({
 
@@ -84,132 +57,72 @@ function Contact() {
 
         });
 
-        setTimeout(() => {
-
-            setSuccess("");
-
-        }, 3000);
-
     };
 
     return (
 
         <section id="contact" className={styles.contact}>
 
-            <div className={styles.heading}>
+            <h2>Contact Us</h2>
 
-                <h2>Contact Us</h2>
+            <form
+                className={styles.form}
+                onSubmit={handleSubmit}
+            >
 
-                <p>
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Your Name"
+                    value={formData.name}
+                    onChange={handleChange}
+                />
 
-                    Let's Design Your Dream Space.
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Your Email"
+                    value={formData.email}
+                    onChange={handleChange}
+                />
 
-                </p>
+                <input
+                    type="tel"
+                    name="phone"
+                    placeholder="Your Phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                />
 
-            </div>
+                <textarea
+                    rows="6"
+                    name="message"
+                    placeholder="Your Message"
+                    value={formData.message}
+                    onChange={handleChange}
+                ></textarea>
 
-            <div className={styles.container}>
+                <button type="submit">
 
-                <div className={styles.info}>
+                    Send Message
 
-                    <h3>Get In Touch</h3>
+                </button>
 
-                    <div className={styles.item}>
-                        📍 Noida , India
-                    </div>
+            </form>
 
-                    <div className={styles.item}>
-                        📞 +91 9876543210
-                    </div>
+            {
 
-                    <div className={styles.item}>
-                        📧 info@royalkinginterior.com
-                    </div>
+                success && (
 
-                </div>
+                    <p className={styles.success}>
 
-                <form
-                    className={styles.form}
-                    onSubmit={handleSubmit}
-                >
+                        {success}
 
-                    <input
+                    </p>
 
-                        type="text"
+                )
 
-                        placeholder="Your Name"
-
-                        name="name"
-
-                        value={formData.name}
-
-                        onChange={handleChange}
-
-                    />
-
-                    <input
-
-                        type="email"
-
-                        placeholder="Your Email"
-
-                        name="email"
-
-                        value={formData.email}
-
-                        onChange={handleChange}
-
-                    />
-
-                    <input
-
-                        type="tel"
-
-                        placeholder="Your Phone"
-
-                        name="phone"
-
-                        value={formData.phone}
-
-                        onChange={handleChange}
-
-                    />
-
-                    <textarea
-
-                        rows="6"
-
-                        placeholder="Your Message"
-
-                        name="message"
-
-                        value={formData.message}
-
-                        onChange={handleChange}
-
-                    />
-
-                    <button>
-
-                        Get Free Consultation
-
-                    </button>
-
-                    {
-
-                        success &&
-
-                        <p className={styles.success}>
-
-                            {success}
-
-                        </p>
-
-                    }
-
-                </form>
-
-            </div>
+            }
 
         </section>
 

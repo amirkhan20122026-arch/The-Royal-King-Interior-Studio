@@ -277,12 +277,16 @@ function Gallery() {
 
                     <button
                         className={styles.close}
-                        onClick={() => setSelectedIndex(null)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedIndex(null);
+                        }}
                     >
                         ✕
                     </button>
 
                     <button
+                        type="button"
                         className={styles.prev}
                         onClick={(e) => {
                             e.stopPropagation();
@@ -300,9 +304,11 @@ function Gallery() {
                         src={filteredImages[selectedIndex].image}
                         alt={filteredImages[selectedIndex].title}
                         onClick={(e) => e.stopPropagation()}
+                        draggable="false"
                     />
 
                     <button
+                        type="button"
                         className={styles.next}
                         onClick={(e) => {
                             e.stopPropagation();

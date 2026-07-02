@@ -1,47 +1,48 @@
 .gallery{
-    padding:80px 40px;
-    background:#fff;
-    overflow-x:hidden;
+    padding:80px 5%;
+    background:#f8f8f8;
+    overflow:hidden;
 }
 
 .gallery h2{
     text-align:center;
-    font-size:45px;
-    margin-bottom:40px;
+    font-size:48px;
     color:#222;
+    margin-bottom:40px;
 }
 
-/* Filter Buttons */
+/* ================= FILTER ================= */
 
 .filterButtons{
     display:flex;
     justify-content:center;
-    gap:15px;
     flex-wrap:wrap;
-    margin-bottom:30px;
+    gap:15px;
+    margin-bottom:25px;
 }
 
 .filterButtons button{
-    padding:12px 25px;
+    padding:12px 24px;
     border:none;
+    border-radius:30px;
     background:#222;
     color:#fff;
-    border-radius:6px;
     cursor:pointer;
-    transition:.3s;
+    transition:.35s;
+    font-weight:600;
 }
 
 .filterButtons button:hover{
-    background:gold;
-    color:#000;
+    background:#D4AF37;
+    color:#111;
 }
 
 .active{
-    background:gold !important;
-    color:#000 !important;
+    background:#D4AF37 !important;
+    color:#111 !important;
 }
 
-/* Search */
+/* ================= SEARCH ================= */
 
 .searchBox{
     display:flex;
@@ -51,45 +52,47 @@
 
 .searchBox input{
     width:100%;
-    max-width:400px;
-    padding:12px 15px;
+    max-width:450px;
+    padding:14px 18px;
+    border-radius:40px;
     border:2px solid #ddd;
-    border-radius:8px;
-    font-size:16px;
     outline:none;
-    box-sizing:border-box;
+    font-size:16px;
+    transition:.3s;
 }
 
 .searchBox input:focus{
-    border-color:gold;
+    border-color:#D4AF37;
 }
 
-/* Gallery Grid */
+/* ================= GRID ================= */
 
 .container{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:20px;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:25px;
 }
 
 .card{
     position:relative;
     overflow:hidden;
-    border-radius:12px;
-    box-shadow:0 5px 20px rgba(0,0,0,.15);
+    border-radius:18px;
+    cursor:pointer;
+    box-shadow:0 10px 25px rgba(0,0,0,.12);
 }
 
 .card img{
     width:100%;
-    height:260px;
+    height:300px;
     object-fit:cover;
-    display:block;
-    transition:.4s;
+    transition:.5s;
 }
 
 .card:hover img{
     transform:scale(1.08);
 }
+
+/* ================= OVERLAY ================= */
 
 .overlay{
     position:absolute;
@@ -99,10 +102,10 @@
     flex-direction:column;
     justify-content:center;
     align-items:center;
-    color:#fff;
     text-align:center;
     opacity:0;
     transition:.4s;
+    color:#fff;
 }
 
 .card:hover .overlay{
@@ -110,107 +113,213 @@
 }
 
 .overlay h3{
-    font-size:24px;
+    font-size:28px;
     margin-bottom:10px;
 }
 
 .overlay p{
-    margin-bottom:20px;
+    margin-bottom:18px;
+    font-size:16px;
 }
 
 .overlay button{
-    padding:12px 25px;
+    padding:12px 28px;
     border:none;
-    background:gold;
-    border-radius:5px;
-    cursor:pointer;
+    border-radius:30px;
+    background:#D4AF37;
+    color:#111;
     font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
 }
+
+.overlay button:hover{
+    background:#fff;
+}
+
+/* ================= LIGHTBOX ================= */
 
 .lightbox{
     position:fixed;
     inset:0;
-    background:rgba(0,0,0,.9);
+    background:rgba(0,0,0,.96);
     display:flex;
     justify-content:center;
     align-items:center;
-    z-index:999;
+    z-index:99999;
 }
 
 .lightbox img{
-    width:80%;
-    max-width:900px;
-    border-radius:10px;
+    max-width:90%;
+    max-height:85vh;
+    object-fit:contain;
+    border-radius:15px;
+    animation:zoom .35s;
 }
 
-/* Tablet */
+/* ================= CLOSE ================= */
+
+.close{
+    position:fixed;
+    top:20px;
+    right:20px;
+    width:48px;
+    height:48px;
+    border:none;
+    border-radius:50%;
+    background:#D4AF37;
+    color:#111;
+    font-size:28px;
+    cursor:pointer;
+    z-index:100000;
+    transition:.3s;
+}
+
+.close:hover{
+    transform:rotate(90deg);
+    background:#fff;
+}
+
+/* ================= ARROWS ================= */
+
+.prev,
+.next{
+    position:fixed;
+    top:50%;
+    transform:translateY(-50%);
+    width:55px;
+    height:55px;
+    border:none;
+    border-radius:50%;
+    background:#fff;
+    color:#111;
+    font-size:24px;
+    cursor:pointer;
+    z-index:100000;
+    transition:.3s;
+}
+
+.prev{
+    left:25px;
+}
+
+.next{
+    right:25px;
+}
+
+.prev:hover,
+.next:hover{
+    background:#D4AF37;
+}
+
+/* ================= COUNTER ================= */
+
+.counter{
+    position:fixed;
+    bottom:25px;
+    left:50%;
+    transform:translateX(-50%);
+    color:#fff;
+    font-size:18px;
+    font-weight:bold;
+}
+
+/* ================= ANIMATION ================= */
+
+@keyframes zoom{
+
+from{
+opacity:0;
+transform:scale(.8);
+}
+
+to{
+opacity:1;
+transform:scale(1);
+}
+
+}
+
+/* ================= TABLET ================= */
 
 @media(max-width:992px){
 
-    .container{
-        grid-template-columns:repeat(2,1fr);
-    }
+.container{
+grid-template-columns:repeat(2,1fr);
+}
 
 }
 
-/* Mobile */
+/* ================= MOBILE ================= */
 
 @media(max-width:768px){
 
-    .gallery{
-        padding:50px 15px;
-    }
+.gallery{
+padding:60px 15px;
+}
 
-    .gallery h2{
-        font-size:34px;
-    }
+.gallery h2{
+font-size:34px;
+}
 
-    .container{
-        grid-template-columns:1fr;
-    }
+.container{
+grid-template-columns:1fr;
+}
 
-    .filterButtons{
-        gap:10px;
-    }
+.card img{
+height:240px;
+}
 
-    .filterButtons button{
-        padding:10px 18px;
-        font-size:14px;
-    }
+.close{
+top:15px;
+right:15px;
+width:42px;
+height:42px;
+font-size:22px;
+}
 
-    .searchBox input{
-        width:100%;
-    }
+.prev,
+.next{
+width:42px;
+height:42px;
+font-size:18px;
+}
 
-    .lightbox img{
-        width:95%;
-    }
+.prev{
+left:10px;
+}
 
-    .prev,
-    .next{
-        font-size:35px;
-    }
+.next{
+right:10px;
+}
 
-    .close{
-        font-size:30px;
-    }
+.lightbox img{
+max-width:95%;
+max-height:75vh;
+}
+
+.overlay h3{
+font-size:22px;
+}
 
 }
 
-/* Small Mobile */
+/* ================= SMALL MOBILE ================= */
 
 @media(max-width:480px){
 
-    .gallery{
-        padding:40px 10px;
-    }
+.gallery h2{
+font-size:28px;
+}
 
-    .gallery h2{
-        font-size:28px;
-    }
+.searchBox input{
+font-size:14px;
+padding:12px 16px;
+}
 
-    .card img{
-        height:220px;
-    }
+.filterButtons button{
+font-size:13px;
+padding:10px 16px;
+}
 
 }
