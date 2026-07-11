@@ -74,5 +74,68 @@ router.post("/contact", async (req, res) => {
     }
 
 });
+// Get All Messages
 
+router.get("/messages", async (req, res) => {
+
+    try {
+
+        const messages = await Contact.find().sort({ createdAt: -1 });
+
+        res.json({
+
+            success: true,
+
+            messages
+
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+
+            success: false,
+
+            message: "Server Error"
+
+        });
+
+    }
+
+});
+
+
+// Delete Message
+
+router.delete("/messages/:id", async (req, res) => {
+
+    try {
+
+        await Contact.findByIdAndDelete(req.params.id);
+
+        res.json({
+
+            success: true,
+
+            message: "Message Deleted Successfully"
+
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+
+            success: false,
+
+            message: "Server Error"
+
+        });
+
+    }
+
+});
 module.exports = router;

@@ -105,7 +105,7 @@ function Contact() {
         </a>
 
         <a
-          href="https://maps.google.com/?q=jaipuria"
+          href="https://maps.google.com/?q=jaipuria gate"
           target="_blank"
           rel="noopener noreferrer"
         >

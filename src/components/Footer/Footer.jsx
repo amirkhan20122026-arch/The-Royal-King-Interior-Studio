@@ -38,28 +38,36 @@ function Footer() {
 
                     <div className={styles.socials}>
 
-                        <a href="#">
-
+                        <a
+                            href="https://facebook.com/yourpage"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
                             <FaFacebookF />
-
                         </a>
 
-                        <a href="#">
-
+                        <a
+                            href="https://instagram.com/mr.khan_official_01"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
                             <FaInstagram />
-
                         </a>
 
-                        <a href="#">
-
+                        <a
+                            href="https://linkedin.com/in/yourprofile"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
                             <FaLinkedinIn />
-
                         </a>
 
-                        <a href="#">
-
+                        <a
+                            href="https://wa.me/918266060671"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
                             <FaWhatsapp />
-
                         </a>
 
                     </div>
@@ -76,18 +84,17 @@ function Footer() {
 
                     </h3>
 
+
+
                     <ul>
-
-                        <li><a href="#hero">Home</a></li>
-
+                        
+                        
+                       
+                        <li><a href="#home">Home</a></li>
                         <li><a href="#about">About</a></li>
-
                         <li><a href="#services">Services</a></li>
-
                         <li><a href="#gallery">Gallery</a></li>
-
                         <li><a href="#contact">Contact</a></li>
-
                     </ul>
 
                 </div>
