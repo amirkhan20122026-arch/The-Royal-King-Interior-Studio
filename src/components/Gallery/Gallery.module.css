@@ -224,6 +224,38 @@
     font-weight:bold;
 }
 
+.statusMessage{
+    padding:40px 15px;
+    text-align:center;
+    color:#666;
+    font-size:18px;
+}
+
+.errorBox{
+    padding:35px 15px;
+    text-align:center;
+}
+
+.errorBox p{
+    margin-bottom:15px;
+    color:#c62828;
+    font-size:17px;
+}
+
+.errorBox button{
+    padding:10px 20px;
+    border:none;
+    border-radius:6px;
+    background:#111;
+    color:#fff;
+    cursor:pointer;
+}
+
+.errorBox button:hover{
+    background:gold;
+    color:#111;
+}
+
 /* ================= ANIMATION ================= */
 
 @keyframes zoom{

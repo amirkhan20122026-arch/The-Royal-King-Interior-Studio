@@ -1,78 +1,37 @@
 const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-
-const Admin = require("../models/Admin");
-
 const router = express.Router();
 
-/*
-   Register Admin
-   Is route ko sirf ek baar use karna hai.
-*/
+const jwt = require("jsonwebtoken");
 
+// Admin Login
 router.post("/admin/login", async (req, res) => {
 
-    try {
+    const { email, password } = req.body;
 
-        const { email, password } = req.body;
-
-        const admin = await Admin.findOne({ email });
-
-        if (!admin) {
-
-            return res.status(400).json({
-                success: false,
-                message: "Invalid Email"
-            });
-
-        }
-
-        const isMatch = await bcrypt.compare(password, admin.password);
-
-        if (!isMatch) {
-
-            return res.status(400).json({
-                success: false,
-                message: "Invalid Password"
-            });
-
-        }
+    if (
+        email === process.env.ADMIN_EMAIL &&
+        password === process.env.ADMIN_PASSWORD
+    ) {
 
         const token = jwt.sign(
-
-            { id: admin._id },
-
-            "mysecretkey",
-
+            { id: "admin" },
+            process.env.JWT_SECRET,
             { expiresIn: "1d" }
-
         );
 
-        res.json({
-
+        return res.json({
             success: true,
-
             message: "Login Successful",
-
             token
-
-        });
-
-    } catch (error) {
-
-        console.log(error);
-
-        res.status(500).json({
-
-            success: false,
-
-            message: "Server Error"
-
         });
 
     }
 
+    return res.status(401).json({
+        success: false,
+        message: "Invalid Email or Password"
+    });
+
 });
 
-module.exports = router;  
+module.exports = router;

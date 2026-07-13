@@ -2,203 +2,198 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Dashboard.module.css";
 
+function GalleryAdmin() {
+  const [title, setTitle] = useState("");
+  const [image, setImage] = useState(null);
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-function Dashboard() {
-
-    const navigate = useNavigate();
-
-  const [messages, setMessages] = useState([]);
-
-  const fetchMessages = async () => {
-
+  const fetchImages = async () => {
     try {
-
-      const res = await fetch("http://localhost:5000/api/messages");
-      const data = await res.json();
+      const response = await fetch("http://localhost:5000/api/gallery");
+      const data = await response.json();
 
       if (data.success) {
-        setMessages(data.messages);
+        setImages(data.images);
       }
-
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.error("Fetch error:", error);
     }
-
   };
 
-  
-      const logout = () => {
-
-  localStorage.removeItem("token");
-
-  navigate("/admin");
-
-};
-
   useEffect(() => {
-
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-
-        navigate("/admin");
-
-    }
-
-}, [navigate]);
-
-  useEffect(() => {
-    fetchMessages();
+    fetchImages();
   }, []);
 
-  const deleteMessage = async (id) => {
+  const handleUpload = async (e) => {
+    e.preventDefault();
 
-    if (!window.confirm("Delete this message?")) return;
-
-    try {
-
-      const res = await fetch(`http://localhost:5000/api/messages/${id}`, {
-        method: "DELETE",
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-
-        alert("Message Deleted Successfully");
-
-        fetchMessages();
-
-      }
-
-
-    } catch (err) {
-
-      console.log(err);
-
+    if (!title.trim()) {
+      alert("Please enter image title");
+      return;
     }
 
+    if (!image) {
+      alert("Please select an image");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const formData = new FormData();
+      formData.append("title", title.trim());
+      formData.append("image", image);
+
+      const response = await fetch(
+        "http://localhost:5000/api/gallery",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Upload failed");
+      }
+
+      alert(data.message);
+
+      setTitle("");
+      setImage(null);
+
+      document.getElementById("galleryImage").value = "";
+
+      fetchImages();
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteImage = async (id) => {
+    const confirmDelete = window.confirm(
+      "Do you want to delete this image?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/gallery/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert(data.message);
+        fetchImages();
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      alert("Unable to delete image");
+    }
   };
 
   return (
+    <div style={{ padding: "40px" }}>
+      <h1>Gallery Management</h1>
 
-    <div className={styles.dashboard}>
+      <form onSubmit={handleUpload}>
+        <input
+          type="text"
+          placeholder="Image Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
 
-      <aside className={styles.sidebar}>
+        <br />
+        <br />
 
-        <h2 className={styles.logo}>Royal King</h2>
+        <input
+          id="galleryImage"
+          type="file"
+          accept="image/*"
+          onChange={(e) => setImage(e.target.files[0])}
+        />
 
-        <ul className={styles.menu}>
-          <li className={styles.active}>🏠 Dashboard</li>
-          <li>📩 Messages</li>
-          <li>🖼 Gallery</li>
-          <li>📂 Projects</li>
-          <li>🚪 Logout</li>
-        </ul>
+        <br />
+        <br />
 
-      </aside>
+        <button type="submit" disabled={loading}>
+          {loading ? "Uploading..." : "Upload Image"}
+        </button>
+      </form>
 
-      <main className={styles.content}>
+      <hr style={{ margin: "40px 0" }} />
 
-        <h1>Admin Dashboard</h1>
+      <h2>Uploaded Images</h2>
 
-        <div className={styles.cards}>
+      {images.length === 0 ? (
+        <p>No gallery images found.</p>
+      ) : (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns:
+              "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: "20px",
+            marginTop: "20px",
+          }}
+        >
+          {images.map((item) => (
+            <div
+              key={item._id}
+              style={{
+                background: "#fff",
+                borderRadius: "12px",
+                overflow: "hidden",
+                boxShadow: "0 5px 15px rgba(0,0,0,.12)",
+              }}
+            >
+              <img
+                src={`http://localhost:5000/uploads/${item.image}`}
+                alt={item.title}
+                style={{
+                  width: "100%",
+                  height: "180px",
+                  objectFit: "cover",
+                }}
+              />
 
-          <div className={styles.card}>
-            <h2>{messages.length}</h2>
-            <p>Total Messages</p>
-          </div>
+              <div style={{ padding: "15px" }}>
+                <h3>{item.title}</h3>
 
-          <div className={styles.card}>
-            <h2>0</h2>
-            <p>Total Projects</p>
-          </div>
-
-          <div className={styles.card}>
-            <h2>0</h2>
-            <p>Gallery Images</p>
-          </div>
-
+                <button
+                  onClick={() => deleteImage(item._id)}
+                  style={{
+                    marginTop: "12px",
+                    padding: "10px 16px",
+                    border: "none",
+                    borderRadius: "6px",
+                    background: "#dc3545",
+                    color: "#fff",
+                    cursor: "pointer",
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
-
-        <div className={styles.tableContainer}>
-
-          <h2 className={styles.tableTitle}>Contact Messages</h2>
-
-          {
-            messages.length === 0 ?
-
-              <p className={styles.noData}>
-                No Messages Found
-              </p>
-
-              :
-
-              <table className={styles.table}>
-
-                <thead>
-
-                  <tr>
-
-                    <th>Name</th>
-
-                    <th>Email</th>
-
-                    <th>Phone</th>
-
-                    <th>Message</th>
-
-                    <th>Action</th>
-
-                  </tr>
-
-                </thead>
-
-                <tbody>
-
-                  {
-                    messages.map((item) => (
-
-                      <tr key={item._id}>
-
-                        <td>{item.name}</td>
-
-                        <td>{item.email}</td>
-
-                        <td>{item.phone}</td>
-
-                        <td>{item.message}</td>
-
-                        <td>
-
-                          <button
-                            className={styles.deleteBtn}
-                            onClick={() => deleteMessage(item._id)}
-                          >
-                            Delete
-                          </button>
-
-                        </td>
-
-                      </tr>
-
-                    ))
-                  }
-
-                </tbody>
-
-              </table>
-
-          }
-
-        </div>
-
-      </main>
-
+      )}
     </div>
-
   );
-
 }
 
-export default Dashboard;
+export default GalleryAdmin;    

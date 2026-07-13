@@ -5,6 +5,7 @@ import Services from "../components/Services/Services";
 import Gallery from "../components/Gallery/Gallery";
 import Contact from "../components/Contact/Contact";
 import Footer from "../components/Footer/Footer";
+import DynamicProjects from "../components/DynamicProjects/DynamicProjects";
 
 function Home() {
   return (
@@ -13,9 +14,11 @@ function Home() {
       <Hero />
       <Services />
       <Gallery />
+      <DynamicProjects />
       <About />
       <Contact />
       <Footer />
+      
     </>
   );
 }
