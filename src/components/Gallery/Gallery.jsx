@@ -1,5 +1,8 @@
+
 import { useEffect, useMemo, useState } from "react";
 import styles from "./Gallery.module.css";
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 function Gallery() {
   const [images, setImages] = useState([]);
@@ -219,14 +222,12 @@ function Gallery() {
               ◀
             </button>
 
-            <img
-              src={`http://localhost:5000/uploads/${
-                filteredImages[selectedIndex].image
-              }`}
-              alt={filteredImages[selectedIndex].title}
-              onClick={(event) => event.stopPropagation()}
-              draggable="false"
-            />
+           <img
+  src={`${API_URL}/uploads/${filteredImages[selectedIndex].image}`}
+  alt={filteredImages[selectedIndex].title}
+  onClick={(event) => event.stopPropagation()}
+  draggable="false"
+/>
 
             <button
               type="button"
