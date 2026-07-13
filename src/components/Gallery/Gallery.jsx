@@ -1,6 +1,6 @@
-
 import { useEffect, useMemo, useState } from "react";
 import styles from "./Gallery.module.css";
+
 const API_URL =
   import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -17,9 +17,7 @@ function Gallery() {
       setLoading(true);
       setError("");
 
-      const response = await fetch(
-        "http://localhost:5000/api/gallery"
-      );
+      const response = await fetch(`${API_URL}/api/gallery`);
 
       const data = await response.json();
 
@@ -57,7 +55,7 @@ function Gallery() {
       const matchCategory =
         category === "All" || itemCategory === category;
 
-      const matchSearch = item.title
+      const matchSearch = (item.title || "")
         .toLowerCase()
         .includes(search.toLowerCase());
 
@@ -172,14 +170,13 @@ function Gallery() {
             {filteredImages.map((item, index) => (
               <div className={styles.card} key={item._id}>
                 <img
-                  src={`http://localhost:5000/uploads/${item.image}`}
+                  src={`${API_URL}/uploads/${item.image}`}
                   alt={item.title}
                   onClick={() => setSelectedIndex(index)}
                 />
 
                 <div className={styles.overlay}>
                   <h3>{item.title}</h3>
-
                   <p>{item.category || "Other"}</p>
 
                   <button
@@ -222,12 +219,14 @@ function Gallery() {
               ◀
             </button>
 
-           <img
-  src={`${API_URL}/uploads/${filteredImages[selectedIndex].image}`}
-  alt={filteredImages[selectedIndex].title}
-  onClick={(event) => event.stopPropagation()}
-  draggable="false"
-/>
+            <img
+              src={`${API_URL}/uploads/${
+                filteredImages[selectedIndex].image
+              }`}
+              alt={filteredImages[selectedIndex].title}
+              onClick={(event) => event.stopPropagation()}
+              draggable="false"
+            />
 
             <button
               type="button"
