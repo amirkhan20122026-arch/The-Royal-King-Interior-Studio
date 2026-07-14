@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./DynamicProjects.module.css";
+const API_URL = import.meta.env.VITE_API_URL;
+
 
 function DynamicProjects() {
   const [projects, setProjects] = useState([]);
@@ -11,9 +13,8 @@ function DynamicProjects() {
       setLoading(true);
       setError("");
 
-      const response = await fetch(
-        "http://localhost:5000/api/projects"
-      );
+      const response = await fetch(`${API_URL}/api/projects`)
+      
 
       const data = await response.json();
 
@@ -84,7 +85,7 @@ function DynamicProjects() {
             >
               <div className={styles.imageBox}>
                 <img
-                  src={`http://localhost:5000/uploads/${project.image}`}
+                 src={`${API_URL}/uploads/${project.image}`}
                   alt={project.title}
                 />
 

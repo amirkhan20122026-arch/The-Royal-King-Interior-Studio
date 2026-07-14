@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./Gallery.module.css";
+const API_URL = import.meta.env.VITE_API_URL;
 
 import gallery1 from "../../assets/gallery1.jpg";
 import gallery2 from "../../assets/gallery2.jpg";

@@ -1,3 +1,4 @@
+const API_URL = import.meta.env.VITE_API_URL;
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -8,44 +9,44 @@ function AdminLogin() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (e) => {
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email || !password) {
-      alert("Please enter email and password");
+      alert("Please enter Email and Password");
       return;
     }
 
     try {
       setLoading(true);
 
-      const response = await fetch(
-        "http://localhost:5000/api/admin/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        }
-      );
+      const response = await fetch(`${API_URL}/api/admin/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
 
       const data = await response.json();
 
-      if (!response.ok || !data.success) {
-        alert(data.message || "Login failed");
-        return;
+      if (data.success) {
+        localStorage.setItem("token", data.token);
+
+        alert("Login Successful");
+
+        navigate("/dashboard");
+      } else {
+        alert(data.message);
       }
-
-      localStorage.setItem("token", data.token);
-
-      navigate("/dashboard", { replace: true });
     } catch (error) {
-      console.error("Login error:", error);
-      alert("Backend server is not running");
+      console.log(error);
+      alert("Server Error");
     } finally {
       setLoading(false);
     }
@@ -58,40 +59,27 @@ function AdminLogin() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        padding: "20px",
         background: "#f4f4f4",
       }}
     >
       <form
-        onSubmit={handleLogin}
+        onSubmit={handleSubmit}
         style={{
-          width: "100%",
-          maxWidth: "380px",
-          padding: "32px",
+          width: "380px",
           background: "#fff",
-          borderRadius: "14px",
-          boxShadow: "0 10px 30px rgba(0,0,0,.12)",
+          padding: "35px",
+          borderRadius: "12px",
+          boxShadow: "0 10px 25px rgba(0,0,0,.15)",
         }}
       >
         <h1
           style={{
-            marginBottom: "8px",
             textAlign: "center",
-            color: "#111",
+            marginBottom: "25px",
           }}
         >
           Admin Login
         </h1>
-
-        <p
-          style={{
-            marginBottom: "24px",
-            textAlign: "center",
-            color: "#777",
-          }}
-        >
-          Royal King Interior Dashboard
-        </p>
 
         <input
           type="email"
@@ -100,11 +88,10 @@ function AdminLogin() {
           onChange={(e) => setEmail(e.target.value)}
           style={{
             width: "100%",
-            padding: "13px",
+            padding: "12px",
             marginBottom: "15px",
-            border: "1px solid #ddd",
             borderRadius: "8px",
-            boxSizing: "border-box",
+            border: "1px solid #ccc",
           }}
         />
 
@@ -115,11 +102,10 @@ function AdminLogin() {
           onChange={(e) => setPassword(e.target.value)}
           style={{
             width: "100%",
-            padding: "13px",
+            padding: "12px",
             marginBottom: "20px",
-            border: "1px solid #ddd",
             borderRadius: "8px",
-            boxSizing: "border-box",
+            border: "1px solid #ccc",
           }}
         />
 
@@ -128,17 +114,17 @@ function AdminLogin() {
           disabled={loading}
           style={{
             width: "100%",
-            padding: "13px",
+            padding: "12px",
+            background: "#000",
+            color: "#FFD700",
             border: "none",
             borderRadius: "8px",
-            background: loading ? "#777" : "#111",
-            color: "gold",
+            cursor: "pointer",
             fontSize: "16px",
             fontWeight: "bold",
-            cursor: loading ? "not-allowed" : "pointer",
           }}
         >
-          {loading ? "Logging in..." : "Login"}
+          {loading ? "Logging In..." : "Login"}
         </button>
       </form>
     </div>

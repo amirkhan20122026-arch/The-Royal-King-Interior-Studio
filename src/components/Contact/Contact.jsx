@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "./Contact.module.css";
+const API_URL = import.meta.env.VITE_API_URL;
 
 import {
   FaPhoneAlt,
@@ -43,7 +44,7 @@ function Contact() {
     try {
       setLoading(true);
 
-      const response = await fetch("http://localhost:5000/api/contact", {
+      const response = await fetch(`${API_URL}/api/contact`, {
         method: "POST",
 
         headers: {

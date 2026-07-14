@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import styles from "./ProjectAdmin.module.css";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function ProjectAdmin() {
   const [formData, setFormData] = useState({
     title: "",
@@ -14,13 +16,15 @@ function ProjectAdmin() {
   const fetchProjects = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/projects"
+        `${API_URL}/api/projects`
       );
 
       const data = await response.json();
 
       if (data.success) {
         setProjects(data.projects);
+      } else {
+        console.error(data.message);
       }
     } catch (error) {
       console.error("Fetch projects error:", error);
@@ -69,7 +73,7 @@ function ProjectAdmin() {
       projectData.append("image", image);
 
       const response = await fetch(
-        "http://localhost:5000/api/projects",
+        `${API_URL}/api/projects`,
         {
           method: "POST",
           body: projectData,
@@ -79,7 +83,9 @@ function ProjectAdmin() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Project upload failed");
+        throw new Error(
+          data.message || "Project upload failed"
+        );
       }
 
       alert(data.message);
@@ -91,7 +97,8 @@ function ProjectAdmin() {
 
       setImage(null);
 
-      const fileInput = document.getElementById("projectImage");
+      const fileInput =
+        document.getElementById("projectImage");
 
       if (fileInput) {
         fileInput.value = "";
@@ -113,7 +120,7 @@ function ProjectAdmin() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/projects/${id}`,
+        `${API_URL}/api/projects/${id}`,
         {
           method: "DELETE",
         }
@@ -162,7 +169,9 @@ function ProjectAdmin() {
             id="projectImage"
             type="file"
             accept="image/*"
-            onChange={(e) => setImage(e.target.files[0])}
+            onChange={(e) =>
+              setImage(e.target.files[0])
+            }
           />
 
           <button type="submit" disabled={loading}>
@@ -186,7 +195,7 @@ function ProjectAdmin() {
                 key={project._id}
               >
                 <img
-                  src={`http://localhost:5000/uploads/${project.image}`}
+                  src={`${API_URL}/uploads/${project.image}`}
                   alt={project.title}
                 />
 
