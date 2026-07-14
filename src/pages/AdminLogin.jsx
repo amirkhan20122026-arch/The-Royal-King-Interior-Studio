@@ -2,141 +2,147 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function AdminLogin() {
-
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
-
     e.preventDefault();
 
-    try {
-
-      const res = await fetch("http://localhost:5000/api/admin/login", {
-
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-
-        localStorage.setItem("token", data.token);
-
-        alert("Login Successful");
-
-        console.log("Token:", data.token);
-
-        navigate("/dashboard", { replace: true });
-
-      } else {
-
-        alert(data.message);
-
-      }
-
-    } catch (error) {
-
-      console.error(error);
-
-      alert("Server Error");
-
+    if (!email || !password) {
+      alert("Please enter email and password");
+      return;
     }
 
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        "http://localhost:5000/api/admin/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        alert(data.message || "Login failed");
+        return;
+      }
+
+      localStorage.setItem("token", data.token);
+
+      navigate("/dashboard", { replace: true });
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Backend server is not running");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-
     <div
       style={{
         minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "#f5f5f5",
+        padding: "20px",
+        background: "#f4f4f4",
       }}
     >
-
       <form
         onSubmit={handleLogin}
         style={{
-          width: "350px",
+          width: "100%",
+          maxWidth: "380px",
+          padding: "32px",
           background: "#fff",
-          padding: "30px",
-          borderRadius: "10px",
-          boxShadow: "0 0 20px rgba(0,0,0,.2)",
+          borderRadius: "14px",
+          boxShadow: "0 10px 30px rgba(0,0,0,.12)",
         }}
       >
-
-        <h2
+        <h1
           style={{
+            marginBottom: "8px",
             textAlign: "center",
-            marginBottom: "20px",
+            color: "#111",
           }}
         >
           Admin Login
-        </h2>
+        </h1>
+
+        <p
+          style={{
+            marginBottom: "24px",
+            textAlign: "center",
+            color: "#777",
+          }}
+        >
+          Royal King Interior Dashboard
+        </p>
 
         <input
           type="email"
-          placeholder="Enter Email"
+          placeholder="Admin Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           style={{
             width: "100%",
-            padding: "12px",
+            padding: "13px",
             marginBottom: "15px",
+            border: "1px solid #ddd",
+            borderRadius: "8px",
             boxSizing: "border-box",
           }}
         />
 
         <input
           type="password"
-          placeholder="Enter Password"
+          placeholder="Admin Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           style={{
             width: "100%",
-            padding: "12px",
+            padding: "13px",
             marginBottom: "20px",
+            border: "1px solid #ddd",
+            borderRadius: "8px",
             boxSizing: "border-box",
           }}
         />
 
         <button
           type="submit"
+          disabled={loading}
           style={{
             width: "100%",
-            padding: "12px",
-            background: "#111",
-            color: "gold",
+            padding: "13px",
             border: "none",
-            cursor: "pointer",
-            borderRadius: "5px",
+            borderRadius: "8px",
+            background: loading ? "#777" : "#111",
+            color: "gold",
             fontSize: "16px",
+            fontWeight: "bold",
+            cursor: loading ? "not-allowed" : "pointer",
           }}
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
-
       </form>
-
     </div>
-
   );
-
 }
 
 export default AdminLogin;

@@ -10,7 +10,6 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import Home from "./pages/Home";
 import AdminLogin from "./pages/AdminLogin";
 import Dashboard from "./pages/Dashboard";
-import GalleryAdmin from "./pages/GalleryAdmin";
 import ProjectAdmin from "./pages/ProjectAdmin";
 
 function App() {
@@ -45,15 +44,6 @@ function App() {
         element={
           <ProtectedRoute>
             <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/gallery-admin"
-        element={
-          <ProtectedRoute>
-            <GalleryAdmin />
           </ProtectedRoute>
         }
       />

@@ -1,102 +1,90 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Gallery.module.css";
 
-const API_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5000";
+import gallery1 from "../../assets/gallery1.jpg";
+import gallery2 from "../../assets/gallery2.jpg";
+import gallery3 from "../../assets/gallery3.jpg";
+import gallery4 from "../../assets/gallery4.jpg";
+import gallery5 from "../../assets/gallery5.jpg";
+import gallery6 from "../../assets/gallery6.jpg";
 
 function Gallery() {
-  const [images, setImages] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [category, setCategory] = useState("All");
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
-  const fetchImages = async () => {
-    try {
-      setLoading(true);
-      setError("");
+  const images = [
+    {
+      id: 1,
+      image: gallery1,
+      title: "Luxury Living Room",
+      category: "Living Room",
+    },
+    {
+      id: 2,
+      image: gallery2,
+      title: "Modern Bedroom",
+      category: "Bedroom",
+    },
+    {
+      id: 3,
+      image: gallery3,
+      title: "Luxury Kitchen",
+      category: "Kitchen",
+    },
+    {
+      id: 4,
+      image: gallery4,
+      title: "Office Interior",
+      category: "Office",
+    },
+    {
+      id: 5,
+      image: gallery5,
+      title: "Luxury Dining Room",
+      category: "Dining",
+    },
+    {
+      id: 6,
+      image: gallery6,
+      title: "Luxury Bathroom",
+      category: "Bathroom",
+    },
+  ];
 
-      const response = await fetch(`${API_URL}/api/gallery`);
+  const filteredImages = images.filter((item) => {
+    const matchCategory =
+      category === "All" || item.category === category;
 
-      const data = await response.json();
+    const matchSearch = item.title
+      .toLowerCase()
+      .includes(search.toLowerCase());
 
-      if (!response.ok) {
-        throw new Error(data.message || "Gallery load failed");
-      }
-
-      if (data.success) {
-        setImages(data.images);
-      }
-    } catch (error) {
-      console.error("Gallery fetch error:", error);
-      setError("Gallery images load nahi ho paayi.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchImages();
-  }, []);
-
-  const categories = useMemo(() => {
-    const uniqueCategories = images.map(
-      (item) => item.category || "Other"
-    );
-
-    return ["All", ...new Set(uniqueCategories)];
-  }, [images]);
-
-  const filteredImages = useMemo(() => {
-    return images.filter((item) => {
-      const itemCategory = item.category || "Other";
-
-      const matchCategory =
-        category === "All" || itemCategory === category;
-
-      const matchSearch = (item.title || "")
-        .toLowerCase()
-        .includes(search.toLowerCase());
-
-      return matchCategory && matchSearch;
-    });
-  }, [images, category, search]);
-
-  const closeLightbox = () => {
-    setSelectedIndex(null);
-  };
-
-  const showNextImage = () => {
-    setSelectedIndex((currentIndex) =>
-      currentIndex === filteredImages.length - 1
-        ? 0
-        : currentIndex + 1
-    );
-  };
-
-  const showPreviousImage = () => {
-    setSelectedIndex((currentIndex) =>
-      currentIndex === 0
-        ? filteredImages.length - 1
-        : currentIndex - 1
-    );
-  };
+    return matchCategory && matchSearch;
+  });
 
   useEffect(() => {
-    const handleKey = (event) => {
+    const handleKey = (e) => {
       if (selectedIndex === null) return;
 
-      if (event.key === "Escape") {
-        closeLightbox();
+      if (e.key === "Escape") {
+        setSelectedIndex(null);
       }
 
-      if (event.key === "ArrowRight") {
-        showNextImage();
+      if (e.key === "ArrowRight") {
+        setSelectedIndex(
+          selectedIndex === filteredImages.length - 1
+            ? 0
+            : selectedIndex + 1
+        );
       }
 
-      if (event.key === "ArrowLeft") {
-        showPreviousImage();
+      if (e.key === "ArrowLeft") {
+        setSelectedIndex(
+          selectedIndex === 0
+            ? filteredImages.length - 1
+            : selectedIndex - 1
+        );
       }
     };
 
@@ -105,29 +93,70 @@ function Gallery() {
     return () => {
       window.removeEventListener("keydown", handleKey);
     };
-  }, [selectedIndex, filteredImages.length]);
-
-  useEffect(() => {
-    setSelectedIndex(null);
-  }, [category, search]);
+  }, [selectedIndex, filteredImages]);
 
   return (
     <section id="gallery" className={styles.gallery}>
       <h2>Our Gallery</h2>
 
       <div className={styles.filterButtons}>
-        {categories.map((itemCategory) => (
-          <button
-            type="button"
-            key={itemCategory}
-            className={
-              category === itemCategory ? styles.active : ""
-            }
-            onClick={() => setCategory(itemCategory)}
-          >
-            {itemCategory}
-          </button>
-        ))}
+        <button
+          type="button"
+          className={category === "All" ? styles.active : ""}
+          onClick={() => setCategory("All")}
+        >
+          All
+        </button>
+
+        <button
+          type="button"
+          className={
+            category === "Living Room" ? styles.active : ""
+          }
+          onClick={() => setCategory("Living Room")}
+        >
+          Living Room
+        </button>
+
+        <button
+          type="button"
+          className={category === "Bedroom" ? styles.active : ""}
+          onClick={() => setCategory("Bedroom")}
+        >
+          Bedroom
+        </button>
+
+        <button
+          type="button"
+          className={category === "Kitchen" ? styles.active : ""}
+          onClick={() => setCategory("Kitchen")}
+        >
+          Kitchen
+        </button>
+
+        <button
+          type="button"
+          className={category === "Office" ? styles.active : ""}
+          onClick={() => setCategory("Office")}
+        >
+          Office
+        </button>
+
+        <button
+          type="button"
+          className={category === "Dining" ? styles.active : ""}
+          onClick={() => setCategory("Dining")}
+        >
+          Dining
+        </button>
+
+        <button
+          type="button"
+          className={category === "Bathroom" ? styles.active : ""}
+          onClick={() => setCategory("Bathroom")}
+        >
+          Bathroom
+        </button>
       </div>
 
       <div className={styles.searchBox}>
@@ -135,115 +164,94 @@ function Gallery() {
           type="text"
           placeholder="Search Gallery..."
           value={search}
-          onChange={(event) => setSearch(event.target.value)}
+          onChange={(e) => setSearch(e.target.value)}
         />
       </div>
 
-      {loading && (
-        <p className={styles.statusMessage}>
-          Loading Gallery...
-        </p>
-      )}
-
-      {!loading && error && (
-        <div className={styles.errorBox}>
-          <p>{error}</p>
-
-          <button type="button" onClick={fetchImages}>
-            Try Again
-          </button>
-        </div>
-      )}
-
-      {!loading &&
-        !error &&
-        filteredImages.length === 0 && (
-          <p className={styles.statusMessage}>
-            No gallery images found.
-          </p>
-        )}
-
-      {!loading &&
-        !error &&
-        filteredImages.length > 0 && (
-          <div className={styles.container}>
-            {filteredImages.map((item, index) => (
-              <div className={styles.card} key={item._id}>
-                <img
-                  src={`${API_URL}/uploads/${item.image}`}
-                  alt={item.title}
-                  onClick={() => setSelectedIndex(index)}
-                />
-
-                <div className={styles.overlay}>
-                  <h3>{item.title}</h3>
-                  <p>{item.category || "Other"}</p>
-
-                  <button
-                    type="button"
-                    onClick={() => setSelectedIndex(index)}
-                  >
-                    View Project
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-      {selectedIndex !== null &&
-        filteredImages[selectedIndex] && (
-          <div
-            className={styles.lightbox}
-            onClick={closeLightbox}
-          >
-            <button
-              type="button"
-              className={styles.close}
-              onClick={(event) => {
-                event.stopPropagation();
-                closeLightbox();
-              }}
-            >
-              ✕
-            </button>
-
-            <button
-              type="button"
-              className={styles.prev}
-              onClick={(event) => {
-                event.stopPropagation();
-                showPreviousImage();
-              }}
-            >
-              ◀
-            </button>
-
+      <div className={styles.container}>
+        {filteredImages.map((item, index) => (
+          <div className={styles.card} key={item.id}>
             <img
-              src={`${API_URL}/uploads/${
-                filteredImages[selectedIndex].image
-              }`}
-              alt={filteredImages[selectedIndex].title}
-              onClick={(event) => event.stopPropagation()}
-              draggable="false"
+              src={item.image}
+              alt={item.title}
+              onClick={() => setSelectedIndex(index)}
             />
 
-            <button
-              type="button"
-              className={styles.next}
-              onClick={(event) => {
-                event.stopPropagation();
-                showNextImage();
-              }}
-            >
-              ▶
-            </button>
+            <div className={styles.overlay}>
+              <h3>{item.title}</h3>
+              <p>{item.category}</p>
 
-            <p className={styles.counter}>
-              {selectedIndex + 1} / {filteredImages.length}
-            </p>
+              <button
+                type="button"
+                onClick={() => setSelectedIndex(index)}
+              >
+                View Project
+              </button>
+            </div>
           </div>
-        )}
+        ))}
+      </div>
+
+      {selectedIndex !== null && filteredImages[selectedIndex] && (
+        <div
+          className={styles.lightbox}
+          onClick={() => setSelectedIndex(null)}
+        >
+          <button
+            type="button"
+            className={styles.close}
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedIndex(null);
+            }}
+          >
+            ✕
+          </button>
+
+          <button
+            type="button"
+            className={styles.prev}
+            onClick={(e) => {
+              e.stopPropagation();
+
+              setSelectedIndex(
+                selectedIndex === 0
+                  ? filteredImages.length - 1
+                  : selectedIndex - 1
+              );
+            }}
+          >
+            ◀
+          </button>
+
+          <img
+            src={filteredImages[selectedIndex].image}
+            alt={filteredImages[selectedIndex].title}
+            onClick={(e) => e.stopPropagation()}
+            draggable="false"
+          />
+
+          <button
+            type="button"
+            className={styles.next}
+            onClick={(e) => {
+              e.stopPropagation();
+
+              setSelectedIndex(
+                selectedIndex === filteredImages.length - 1
+                  ? 0
+                  : selectedIndex + 1
+              );
+            }}
+          >
+            ▶
+          </button>
+
+          <p className={styles.counter}>
+            {selectedIndex + 1} / {filteredImages.length}
+          </p>
+        </div>
+      )}
     </section>
   );
 }
