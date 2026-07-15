@@ -1,34 +1,36 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+
 import Home from "./pages/Home";
-import GalleryAdmin from "./pages/GalleryAdmin";
+import AdminLogin from "./pages/AdminLogin";
+import Dashboard from "./pages/Dashboard";
 import ProjectAdmin from "./pages/ProjectAdmin";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
+    <Routes>
+      <Route path="/" element={<Home />} />
 
-        <Route
-          path="/admin/gallery"
-          element={
-            <ProtectedRoute>
-              <GalleryAdmin />
-            </ProtectedRoute>
-          }
-        />
+      <Route path="/admin" element={<AdminLogin />} />
 
-        <Route
-          path="/admin/projects"
-          element={
-            <ProtectedRoute>
-              <ProjectAdmin />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/project-admin"
+        element={
+          <ProtectedRoute>
+            <ProjectAdmin />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
   );
 }
 
