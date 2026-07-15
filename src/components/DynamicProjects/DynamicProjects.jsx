@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import styles from "./DynamicProjects.module.css";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://the-royal-king-interior-studio.onrender.com";
 
 function DynamicProjects() {
   const [projects, setProjects] = useState([]);
@@ -17,20 +19,24 @@ function DynamicProjects() {
         `${API_URL}/api/projects`
       );
 
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status}`);
+      }
+
       const data = await response.json();
 
-      if (!response.ok) {
+      if (data.success) {
+        setProjects(data.projects || []);
+      } else {
         throw new Error(
           data.message || "Projects load failed"
         );
       }
-
-      if (data.success) {
-        setProjects(data.projects || []);
-      }
     } catch (error) {
       console.error("Projects fetch error:", error);
-      setError("Projects load nahi ho paaye.");
+      setError(
+        "Projects abhi load nahi ho pa rahe. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -41,28 +47,28 @@ function DynamicProjects() {
   }, []);
 
   return (
-    <section
-      id="projects"
-      className={styles.projects}
-    >
+    <section id="projects" className={styles.projects}>
       <div className={styles.heading}>
         <span>Our Portfolio</span>
 
         <h2>Latest Interior Projects</h2>
 
         <p>
-          Explore our recently completed interior design projects.
+          Explore our recently completed interior design
+          projects.
         </p>
       </div>
 
       {loading && (
-        <p className={styles.loading}>
-          Loading Projects...
-        </p>
+        <div className={styles.statusBox}>
+          <div className={styles.loader}></div>
+          <p>Loading projects...</p>
+        </div>
       )}
 
       {!loading && error && (
-        <div className={styles.error}>
+        <div className={styles.errorBox}>
+          <h3>Unable to load projects</h3>
           <p>{error}</p>
 
           <button type="button" onClick={fetchProjects}>
@@ -74,9 +80,9 @@ function DynamicProjects() {
       {!loading &&
         !error &&
         projects.length === 0 && (
-          <p className={styles.noProjects}>
-            No projects found.
-          </p>
+          <div className={styles.statusBox}>
+            <p>No projects have been added yet.</p>
+          </div>
         )}
 
       {!loading &&
