@@ -1,6 +1,5 @@
 import { useState } from "react";
 import styles from "./Contact.module.css";
-const API_URL = import.meta.env.VITE_API_URL;
 
 import {
   FaPhoneAlt,
@@ -9,6 +8,10 @@ import {
   FaInstagram,
   FaMapMarkerAlt,
 } from "react-icons/fa";
+
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://the-royal-king-interior-studio.onrender.com";
 
 function Contact() {
   const [formData, setFormData] = useState({
@@ -22,20 +25,20 @@ function Contact() {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
+    setFormData((previousData) => ({
+      ...previousData,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (
-      !formData.name ||
-      !formData.email ||
-      !formData.phone ||
-      !formData.message
+      !formData.name.trim() ||
+      !formData.email.trim() ||
+      !formData.phone.trim() ||
+      !formData.message.trim()
     ) {
       alert("Please fill all fields.");
       return;
@@ -43,6 +46,7 @@ function Contact() {
 
     try {
       setLoading(true);
+      setSuccess("");
 
       const response = await fetch(`${API_URL}/api/contact`, {
         method: "POST",
@@ -51,12 +55,31 @@ function Contact() {
           "Content-Type": "application/json",
         },
 
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim(),
+          message: formData.message.trim(),
+        }),
       });
 
-      const data = await response.json();
+      const responseText = await response.text();
 
-      setSuccess(data.message);
+      let data;
+
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        throw new Error("Backend returned an invalid response.");
+      }
+
+      if (!response.ok || !data.success) {
+        throw new Error(
+          data.message || "Message could not be sent."
+        );
+      }
+
+      setSuccess(data.message || "Message sent successfully.");
 
       setFormData({
         name: "",
@@ -65,8 +88,8 @@ function Contact() {
         message: "",
       });
     } catch (error) {
-      console.log(error);
-      alert("Server Error");
+      console.error("Contact form error:", error);
+      alert(error.message || "Server Error");
     } finally {
       setLoading(false);
     }
@@ -91,9 +114,9 @@ function Contact() {
           <span>WhatsApp</span>
         </a>
 
-        <a href="mailto:amirkhan2012026@gmail.com">
+        <a href="mailto:amirkhan20122026@gmail.com">
           <FaEnvelope />
-          <span>amirkhan2012026@gmail.com</span>
+          <span>amirkhan20122026@gmail.com</span>
         </a>
 
         <a
@@ -106,12 +129,12 @@ function Contact() {
         </a>
 
         <a
-          href="https://maps.google.com/?q=jaipuria gate"
+          href="https://maps.google.com/?q=Hapur Uttar Pradesh"
           target="_blank"
           rel="noopener noreferrer"
         >
           <FaMapMarkerAlt />
-          <span>Location</span>
+          <span>Hapur, Uttar Pradesh</span>
         </a>
       </div>
 
@@ -122,6 +145,7 @@ function Contact() {
           placeholder="Your Name"
           value={formData.name}
           onChange={handleChange}
+          required
         />
 
         <input
@@ -130,6 +154,7 @@ function Contact() {
           placeholder="Your Email"
           value={formData.email}
           onChange={handleChange}
+          required
         />
 
         <input
@@ -138,6 +163,7 @@ function Contact() {
           placeholder="Your Phone"
           value={formData.phone}
           onChange={handleChange}
+          required
         />
 
         <textarea
@@ -146,14 +172,19 @@ function Contact() {
           placeholder="Your Message"
           value={formData.message}
           onChange={handleChange}
-        ></textarea>
+          required
+        />
 
         <button type="submit" disabled={loading}>
           {loading ? "Sending..." : "Send Message"}
         </button>
       </form>
 
-      {success && <p className={styles.success}>{success}</p>}
+      {success && (
+        <p className={styles.success}>
+          {success}
+        </p>
+      )}
     </section>
   );
 }
