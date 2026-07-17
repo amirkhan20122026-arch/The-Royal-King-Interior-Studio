@@ -48,6 +48,12 @@ function Contact() {
       setLoading(true);
       setSuccess("");
 
+      const controller = new AbortController();
+
+      const timeoutId = setTimeout(() => {
+        controller.abort();
+      }, 30000);
+
       const response = await fetch(`${API_URL}/api/contact`, {
         method: "POST",
 
@@ -61,17 +67,13 @@ function Contact() {
           phone: formData.phone.trim(),
           message: formData.message.trim(),
         }),
+
+        signal: controller.signal,
       });
 
-      const responseText = await response.text();
+      clearTimeout(timeoutId);
 
-      let data;
-
-      try {
-        data = JSON.parse(responseText);
-      } catch {
-        throw new Error("Backend returned an invalid response.");
-      }
+      const data = await response.json();
 
       if (!response.ok || !data.success) {
         throw new Error(
@@ -79,7 +81,7 @@ function Contact() {
         );
       }
 
-      setSuccess(data.message || "Message sent successfully.");
+      setSuccess("Message sent successfully.");
 
       setFormData({
         name: "",
@@ -89,7 +91,12 @@ function Contact() {
       });
     } catch (error) {
       console.error("Contact form error:", error);
-      alert(error.message || "Server Error");
+
+      if (error.name === "AbortError") {
+        alert("Server is taking too long. Please try again.");
+      } else {
+        alert(error.message || "Server Error");
+      }
     } finally {
       setLoading(false);
     }
